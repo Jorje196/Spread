@@ -32,7 +32,7 @@ const_offset_table  = 60
 
 
 function resize_table (lt_id,n)
-	local x_lt, y_lt, x_rb, y_rb, x_delta, y_delta; -- test connectio
+	local x_lt, y_lt, x_rb, y_rb, x_delta, y_delta;
 	
 	y_lt,x_lt,y_rb,x_rb = GetWindowRect(lt_id);
 	
