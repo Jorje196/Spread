@@ -1,38 +1,38 @@
 
 
--- Программа расчета процентов (годовых) для пар База-Дериватив или Дериватив-Дериватив на временном распаде деривативов 
--- Инфа : для вывода в таблицу кириллицы используем кодировку ANSI для данного файла
--- Для исключения влияния скрипта на настройки таблиц QUIK , соответствующие инструменты заносим в 3Т (табл тек торгов) 
--- ручками (можно доверить скрипту через функцию bool ParamRequest (str ClassCode, str SecCode, str ParamCode), при этом
--- в настройках QUIK устанавливаем признак получения данных «Исходя из настроек открытых пользователем таблиц» в меню 
--- "Система / Настройки / Основные настройки..., раздел «Программа» / «Получение данных» ").
+-- ГЏГ°Г®ГЈГ°Г Г¬Г¬Г  Г°Г Г±Г·ГҐГІГ  ГЇГ°Г®Г¶ГҐГ­ГІГ®Гў (ГЈГ®Г¤Г®ГўГ»Гµ) Г¤Г«Гї ГЇГ Г° ГЃГ Г§Г -Г„ГҐГ°ГЁГўГ ГІГЁГў ГЁГ«ГЁ Г„ГҐГ°ГЁГўГ ГІГЁГў-Г„ГҐГ°ГЁГўГ ГІГЁГў Г­Г  ГўГ°ГҐГ¬ГҐГ­Г­Г®Г¬ Г°Г Г±ГЇГ Г¤ГҐ Г¤ГҐГ°ГЁГўГ ГІГЁГўГ®Гў 
+-- Г€Г­ГґГ  : Г¤Г«Гї ГўГ»ГўГ®Г¤Г  Гў ГІГ ГЎГ«ГЁГ¶Гі ГЄГЁГ°ГЁГ«Г«ГЁГ¶Г» ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГ¬ ГЄГ®Г¤ГЁГ°Г®ГўГЄГі ANSI Г¤Г«Гї Г¤Г Г­Г­Г®ГЈГ® ГґГ Г©Г«Г 
+-- Г„Г«Гї ГЁГ±ГЄГ«ГѕГ·ГҐГ­ГЁГї ГўГ«ГЁГїГ­ГЁГї Г±ГЄГ°ГЁГЇГІГ  Г­Г  Г­Г Г±ГІГ°Г®Г©ГЄГЁ ГІГ ГЎГ«ГЁГ¶ QUIK , Г±Г®Г®ГІГўГҐГІГ±ГІГўГіГѕГ№ГЁГҐ ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІГ» Г§Г Г­Г®Г±ГЁГ¬ Гў 3Г’ (ГІГ ГЎГ« ГІГҐГЄ ГІГ®Г°ГЈГ®Гў) 
+-- Г°ГіГ·ГЄГ Г¬ГЁ (Г¬Г®Г¦Г­Г® Г¤Г®ГўГҐГ°ГЁГІГј Г±ГЄГ°ГЁГЇГІГі Г·ГҐГ°ГҐГ§ ГґГіГ­ГЄГ¶ГЁГѕ bool ParamRequest (str ClassCode, str SecCode, str ParamCode), ГЇГ°ГЁ ГЅГІГ®Г¬
+-- Гў Г­Г Г±ГІГ°Г®Г©ГЄГ Гµ QUIK ГіГ±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ ГЇГ°ГЁГ§Г­Г ГЄ ГЇГ®Г«ГіГ·ГҐГ­ГЁГї Г¤Г Г­Г­Г»Гµ В«Г€Г±ГµГ®Г¤Гї ГЁГ§ Г­Г Г±ГІГ°Г®ГҐГЄ Г®ГІГЄГ°Г»ГІГ»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ¬ ГІГ ГЎГ«ГЁГ¶В» Гў Г¬ГҐГ­Гѕ 
+-- "Г‘ГЁГ±ГІГҐГ¬Г  / ГЌГ Г±ГІГ°Г®Г©ГЄГЁ / ГЋГ±Г­Г®ГўГ­Г»ГҐ Г­Г Г±ГІГ°Г®Г©ГЄГЁ..., Г°Г Г§Г¤ГҐГ« В«ГЏГ°Г®ГЈГ°Г Г¬Г¬Г В» / В«ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»ГµВ» ").
 
---	! При случае типизировать проверки корректности чтенияиз 3Т , можно извратиться с классом, для полного изврата
---  работу с таблицей оформить через метод с self
---  ? Нет смысла ограничивать время работы скрипта временем проведения торгов по базовому активу, подумать что отображать
---  в таблице в дополнительную сессию и пререрывы.
+--	! ГЏГ°ГЁ Г±Г«ГіГ·Г ГҐ ГІГЁГЇГЁГ§ГЁГ°Г®ГўГ ГІГј ГЇГ°Г®ГўГҐГ°ГЄГЁ ГЄГ®Г°Г°ГҐГЄГІГ­Г®Г±ГІГЁ Г·ГІГҐГ­ГЁГїГЁГ§ 3Г’ , Г¬Г®Г¦Г­Г® ГЁГ§ГўГ°Г ГІГЁГІГјГ±Гї Г± ГЄГ«Г Г±Г±Г®Г¬, Г¤Г«Гї ГЇГ®Г«Г­Г®ГЈГ® ГЁГ§ГўГ°Г ГІГ 
+--  Г°Г ГЎГ®ГІГі Г± ГІГ ГЎГ«ГЁГ¶ГҐГ© Г®ГґГ®Г°Г¬ГЁГІГј Г·ГҐГ°ГҐГ§ Г¬ГҐГІГ®Г¤ Г± self
+--  ? ГЌГҐГІ Г±Г¬Г»Г±Г«Г  Г®ГЈГ°Г Г­ГЁГ·ГЁГўГ ГІГј ГўГ°ГҐГ¬Гї Г°Г ГЎГ®ГІГ» Г±ГЄГ°ГЁГЇГІГ  ГўГ°ГҐГ¬ГҐГ­ГҐГ¬ ГЇГ°Г®ГўГҐГ¤ГҐГ­ГЁГї ГІГ®Г°ГЈГ®Гў ГЇГ® ГЎГ Г§Г®ГўГ®Г¬Гі Г ГЄГІГЁГўГі, ГЇГ®Г¤ГіГ¬Г ГІГј Г·ГІГ® Г®ГІГ®ГЎГ°Г Г¦Г ГІГј
+--  Гў ГІГ ГЎГ«ГЁГ¶ГҐ Гў Г¤Г®ГЇГ®Г«Г­ГЁГІГҐГ«ГјГ­ГіГѕ Г±ГҐГ±Г±ГЁГѕ ГЁ ГЇГ°ГҐГ°ГҐГ°Г»ГўГ».
 
-stopped=false				-- переменная для прырывания цикла при срабатывании функции обратного вызова OnStop
+stopped=false				-- ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Г¤Г«Гї ГЇГ°Г»Г°Г»ГўГ Г­ГЁГї Г¶ГЁГЄГ«Г  ГЇГ°ГЁ Г±Г°Г ГЎГ ГІГ»ГўГ Г­ГЁГЁ ГґГіГ­ГЄГ¶ГЁГЁ Г®ГЎГ°Г ГІГ­Г®ГЈГ® ГўГ»Г§Г®ГўГ  OnStop
 
-Firm_id   			= "MC00XXXXXXXX"    -- торговый счет
+Firm_id   			= "MC00XXXXXXXX"    -- ГІГ®Г°ГЈГ®ГўГ»Г© Г±Г·ГҐГІ
 Client_id 			= "SPBFUTYYYYY"
 
-ClassCode 			= {"TQBR","SPBFUT"}		-- доступные коды классов
-BaseSecCode			= {"SBER","GAZP"}		-- доступные коды инструментов (базы)
-ObjSecCode			= {"SRH7","SRM7","GZU7","GZZ7"}	-- доступные коды квартальных фьючерсов (объекты)
+ClassCode 			= {"TQBR","SPBFUT"}		-- Г¤Г®Г±ГІГіГЇГ­Г»ГҐ ГЄГ®Г¤Г» ГЄГ«Г Г±Г±Г®Гў
+BaseSecCode			= {"SBER","GAZP"}		-- Г¤Г®Г±ГІГіГЇГ­Г»ГҐ ГЄГ®Г¤Г» ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІГ®Гў (ГЎГ Г§Г»)
+ObjSecCode			= {"SRH7","SRM7","GZU7","GZZ7"}	-- Г¤Г®Г±ГІГіГЇГ­Г»ГҐ ГЄГ®Г¤Г» ГЄГўГ Г°ГІГ Г«ГјГ­Г»Гµ ГґГјГѕГ·ГҐГ°Г±Г®Гў (Г®ГЎГєГҐГЄГІГ»)
 
-YearLenght = 365					-- число дней в году
-RiskFree = 0  				--  безрисковая ставка %, задаем 
+YearLenght = 365					-- Г·ГЁГ±Г«Г® Г¤Г­ГҐГ© Гў ГЈГ®Г¤Гі
+RiskFree = 0  				--  ГЎГҐГ§Г°ГЁГ±ГЄГ®ГўГ Гї Г±ГІГ ГўГЄГ  %, Г§Г Г¤Г ГҐГ¬ 
 
-ListCouples = {}		-- список рабочих пар (база-объект), наполняется при Init из файла состояния, но допустимо и руками
+ListCouples = {}		-- Г±ГЇГЁГ±Г®ГЄ Г°Г ГЎГ®Г·ГЁГµ ГЇГ Г° (ГЎГ Г§Г -Г®ГЎГєГҐГЄГІ), Г­Г ГЇГ®Г«Г­ГїГҐГІГ±Гї ГЇГ°ГЁ Init ГЁГ§ ГґГ Г©Г«Г  Г±Г®Г±ГІГ®ГїГ­ГЁГї, Г­Г® Г¤Г®ГЇГіГ±ГІГЁГ¬Г® ГЁ Г°ГіГЄГ Г¬ГЁ
 
-t_wait = 5000				-- время сна на шаг для main() в милисекундах
-const_resize_table	= 16		-- константы для коррекции размеров таблицы рез-тов
+t_wait = 5000				-- ГўГ°ГҐГ¬Гї Г±Г­Г  Г­Г  ГёГ ГЈ Г¤Г«Гї main() Гў Г¬ГЁГ«ГЁГ±ГҐГЄГіГ­Г¤Г Гµ
+const_resize_table	= 16		-- ГЄГ®Г­Г±ГІГ Г­ГІГ» Г¤Г«Гї ГЄГ®Г°Г°ГҐГЄГ¶ГЁГЁ Г°Г Г§Г¬ГҐГ°Г®Гў ГІГ ГЎГ«ГЁГ¶Г» Г°ГҐГ§-ГІГ®Гў
 const_offset_table  = 60
 
 
 function resize_table (lt_id,n)
-	local x_lt, y_lt, x_rb, y_rb, x_delta, y_delta;
+	local x_lt, y_lt, x_rb, y_rb, x_delta, y_delta; -- test connection
 	
 	y_lt,x_lt,y_rb,x_rb = GetWindowRect(lt_id);
 	
@@ -46,10 +46,10 @@ end
 
 function OnInit ()
 	local flag_handmade = 0;
-	-- считывание и обработка файла состояния 
+	-- Г±Г·ГЁГІГ»ГўГ Г­ГЁГҐ ГЁ Г®ГЎГ°Г ГЎГ®ГІГЄГ  ГґГ Г©Г«Г  Г±Г®Г±ГІГ®ГїГ­ГЁГї 
 
 
-	flag_handmade = 1;		-- включение ручного вырианта определения инструментов 
+	flag_handmade = 1;		-- ГўГЄГ«ГѕГ·ГҐГ­ГЁГҐ Г°ГіГ·Г­Г®ГЈГ® ГўГ»Г°ГЁГ Г­ГІГ  Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГї ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІГ®Гў 
 	if (flag_handmade) then
 	
 		ListCouples[2]={"TQBR","SBER","SPBFUT","SRZ7"};
@@ -66,28 +66,28 @@ function OnInit ()
 
 end
 
-_PrintDbgStr = PrintDbgStr			-- переназначение в целях отладки
+_PrintDbgStr = PrintDbgStr			-- ГЇГҐГ°ГҐГ­Г Г§Г­Г Г·ГҐГ­ГЁГҐ Гў Г¶ГҐГ«ГїГµ Г®ГІГ«Г Г¤ГЄГЁ
 function PrintDbgStr(s,t) 
--- t - время удержания сообщения в сек
+-- t - ГўГ°ГҐГ¬Гї ГіГ¤ГҐГ°Г¦Г Г­ГЁГї Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Гў Г±ГҐГЄ
 	message(s,0)
 	sleep (t*1000)
 end
 
-									-- функции форматирования данных в столбцах результирующей таблицы
+									-- ГґГіГ­ГЄГ¶ГЁГЁ ГґГ®Г°Г¬Г ГІГЁГ°Г®ГўГ Г­ГЁГї Г¤Г Г­Г­Г»Гµ Гў Г±ГІГ®Г«ГЎГ¶Г Гµ Г°ГҐГ§ГіГ«ГјГІГЁГ°ГіГѕГ№ГҐГ© ГІГ ГЎГ«ГЁГ¶Г»
 function f_form00c (x)			
-	local s																	-- тип
+	local s																	-- ГІГЁГЇ
 	if x then s= "   "..x else s = " --- " end		
 	return s
 end
 
 function f_form04c (x) 
-	local s																	-- до исполнения
+	local s																	-- Г¤Г® ГЁГ±ГЇГ®Г«Г­ГҐГ­ГЁГї
 	if x then s=string.format("   %d     ", x) else s = " --- " end
 	return s
 end
 
 function f_form06c (x) 
-	local s																	-- прц с 3 знаками
+	local s																	-- ГЇГ°Г¶ Г± 3 Г§Г­Г ГЄГ Г¬ГЁ
 	if x then 
 		-- PrintDbgStr("x= "..x,3)
 		s=string.format(" %.03f   ", x)
@@ -98,34 +98,34 @@ end
 
 
 
-function main ()					-- основной поток
+function main ()					-- Г®Г±Г­Г®ГўГ­Г®Г© ГЇГ®ГІГ®ГЄ
 
 	local num_rows, i, t;
 	
-											-- описание таблицы	string.format("quik  %6d csharp%s", x, ".ru")
+											-- Г®ГЇГЁГ±Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г»	string.format("quik  %6d csharp%s", x, ".ru")
 	tal = {}			-- table_acc_list == tal
-	tal [1] = {data="basa", 	c_num=0, c_name=" База  ", c_width = 12, d_type=QTABLE_STRING_TYPE, d_form = f_form00c}
-	tal [2] = {data="object", 		c_num=1, c_name=" Объект ", c_width = 12, d_type=QTABLE_STRING_TYPE, d_form = f_form00c }
+	tal [1] = {data="basa", 	c_num=0, c_name=" ГЃГ Г§Г   ", c_width = 12, d_type=QTABLE_STRING_TYPE, d_form = f_form00c}
+	tal [2] = {data="object", 		c_num=1, c_name=" ГЋГЎГєГҐГЄГІ ", c_width = 12, d_type=QTABLE_STRING_TYPE, d_form = f_form00c }
 	tal [3] = {data="perc_by_fact", 	c_num=2, c_name="By fact,%", c_width = 12, d_type=QTABLE_INT_TYPE , d_form = f_form06c}
 	tal [4] = {data="perc_by_bid", 	c_num=3, c_name="By bids,%", c_width = 12, d_type=QTABLE_INT_TYPE, d_form = f_form06c }
-	tal [5] = {data="days_to_mat_date", c_num=4, c_name=" До исп. ", c_width = 15, d_type=QTABLE_INT_TYPE, d_form = f_form04c}
+	tal [5] = {data="days_to_mat_date", c_num=4, c_name=" Г„Г® ГЁГ±ГЇ. ", c_width = 15, d_type=QTABLE_INT_TYPE, d_form = f_form04c}
 	tal [6] = {data="eff_perc_bf", 	c_num=5, c_name="Eff bf,%", c_width = 15, d_type=QTABLE_INT_TYPE,d_form = f_form06c}
 	tal [7] = {data="eff_perc_bb", 		c_num=6, c_name="Eff bb,%", c_width = 15, d_type=QTABLE_INT_TYPE, d_form = f_form06c}
 	
 
-	t_id = AllocTable()				-- создаем таблицу результатов расчетов (возвращает целочисл идентификатор таблицы)	
+	t_id = AllocTable()				-- Г±Г®Г§Г¤Г ГҐГ¬ ГІГ ГЎГ«ГЁГ¶Гі Г°ГҐГ§ГіГ«ГјГІГ ГІГ®Гў Г°Г Г±Г·ГҐГІГ®Гў (ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г¶ГҐГ«Г®Г·ГЁГ±Г« ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° ГІГ ГЎГ«ГЁГ¶Г»)	
 	
-									-- формируем колонки таблицы
+									-- ГґГ®Г°Г¬ГЁГ°ГіГҐГ¬ ГЄГ®Г«Г®Г­ГЄГЁ ГІГ ГЎГ«ГЁГ¶Г»
 	for i= 1, #tal do
 		AddColumn(t_id, tal[i].c_num, tal[i].c_name, true, tal[i].d_type, tal[i].c_width)	
 	end	
 	
-	w_t_id = CreateWindow(t_id)		-- окно таблицы результатов (возвращает целочисл 1 (норм) / 0 (ошибка) )
+	w_t_id = CreateWindow(t_id)		-- Г®ГЄГ­Г® ГІГ ГЎГ«ГЁГ¶Г» Г°ГҐГ§ГіГ«ГјГІГ ГІГ®Гў (ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г¶ГҐГ«Г®Г·ГЁГ±Г« 1 (Г­Г®Г°Г¬) / 0 (Г®ГёГЁГЎГЄГ ) )
 	
-	SetWindowCaption(t_id, "Таблица результатов скрипта Spread.lua") 	-- заголовок окна
-	InsertRow(t_id, -1)		-- добавляет строку
+	SetWindowCaption(t_id, "Г’Г ГЎГ«ГЁГ¶Г  Г°ГҐГ§ГіГ«ГјГІГ ГІГ®Гў Г±ГЄГ°ГЁГЇГІГ  Spread.lua") 	-- Г§Г ГЈГ®Г«Г®ГўГ®ГЄ Г®ГЄГ­Г 
+	InsertRow(t_id, -1)		-- Г¤Г®ГЎГ ГўГ«ГїГҐГІ Г±ГІГ°Г®ГЄГі
 	
-	Param_list = {"bid", "offer", "last", "days_to_mat_date","lotsize"}	-- список параметров для обращения к 3Т
+	Param_list = {"bid", "offer", "last", "days_to_mat_date","lotsize"}	-- Г±ГЇГЁГ±Г®ГЄ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў Г¤Г«Гї Г®ГЎГ°Г Г№ГҐГ­ГЁГї ГЄ 3Г’
 
 	
 	
@@ -133,11 +133,11 @@ function main ()					-- основной поток
 		local num_rows;
 		
 		
-		num_rows = GetTableSize (t_id);		-- они тут , а не в ините
+		num_rows = GetTableSize (t_id);		-- Г®Г­ГЁ ГІГіГІ , Г  Г­ГҐ Гў ГЁГ­ГЁГІГҐ
 		if (num_rows ~= #ListCouples) then
-			resize_table (t_id,#ListCouples);	-- для расшир под коррекцию списка без перезапуска скрипта
+			resize_table (t_id,#ListCouples);	-- Г¤Г«Гї Г°Г Г±ГёГЁГ° ГЇГ®Г¤ ГЄГ®Г°Г°ГҐГЄГ¶ГЁГѕ Г±ГЇГЁГ±ГЄГ  ГЎГҐГ§ ГЇГҐГ°ГҐГ§Г ГЇГіГ±ГЄГ  Г±ГЄГ°ГЁГЇГІГ 
 		end
-		if (num_rows ~= #ListCouples) then Clear (t_id)  end	-- очищаем , если кол-во строк не соответствует
+		if (num_rows ~= #ListCouples) then Clear (t_id)  end	-- Г®Г·ГЁГ№Г ГҐГ¬ , ГҐГ±Г«ГЁ ГЄГ®Г«-ГўГ® Г±ГІГ°Г®ГЄ Г­ГҐ Г±Г®Г®ГІГўГҐГІГ±ГІГўГіГҐГІ
 		
 		local output_str = {};		
 		for i=1, #ListCouples do
@@ -146,47 +146,47 @@ function main ()					-- основной поток
 			local y = {};
 			
 			x = getParamEx(ListCouples[i][1], ListCouples[i][2],"tradingstatus");
-			-- y = getParamEx(ListCouples[i][3], ListCouples[i][4],"tradingstatus");  -- сессия производной шире
+			-- y = getParamEx(ListCouples[i][3], ListCouples[i][4],"tradingstatus");  -- Г±ГҐГ±Г±ГЁГї ГЇГ°Г®ГЁГ§ГўГ®Г¤Г­Г®Г© ГёГЁГ°ГҐ
 			
 
-			if (x.param_value + 0. == 1.0) then 		-- если сессия по базе открыта
+			if (x.param_value + 0. == 1.0) then 		-- ГҐГ±Г«ГЁ Г±ГҐГ±Г±ГЁГї ГЇГ® ГЎГ Г§ГҐ Г®ГІГЄГ°Г»ГІГ 
 						
 			
 			output_str.basa = ListCouples[i][2];
 			output_str.object = ListCouples[i][4];
-									-- читаем параметры из 3Т , обработка ошибок в данном скрипте не нужна , т к хроника
-									-- видна глазом, разовые некритичны, но при встраивании в робот добавить необходимо
-						-- дней до экспирации
+									-- Г·ГЁГІГ ГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ°Г» ГЁГ§ 3Г’ , Г®ГЎГ°Г ГЎГ®ГІГЄГ  Г®ГёГЁГЎГ®ГЄ Гў Г¤Г Г­Г­Г®Г¬ Г±ГЄГ°ГЁГЇГІГҐ Г­ГҐ Г­ГіГ¦Г­Г  , ГІ ГЄ ГµГ°Г®Г­ГЁГЄГ 
+									-- ГўГЁГ¤Г­Г  ГЈГ«Г Г§Г®Г¬, Г°Г Г§Г®ГўГ»ГҐ Г­ГҐГЄГ°ГЁГІГЁГ·Г­Г», Г­Г® ГЇГ°ГЁ ГўГ±ГІГ°Г ГЁГўГ Г­ГЁГЁ Гў Г°Г®ГЎГ®ГІ Г¤Г®ГЎГ ГўГЁГІГј Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г®
+						-- Г¤Г­ГҐГ© Г¤Г® ГЅГЄГ±ГЇГЁГ°Г Г¶ГЁГЁ
 			y = getParamEx(ListCouples[i][3], ListCouples[i][4],"days_to_mat_date");
-				--				PrintDbgStr("result= "..d.." значение "..y.param_value,5) ;
+				--				PrintDbgStr("result= "..d.." Г§Г­Г Г·ГҐГ­ГЁГҐ "..y.param_value,5) ;
 
-			if (ListCouples[i][1] ~= "TQBR") then message (" Ложная база ",0) end	-- для текущей версии
+			if (ListCouples[i][1] ~= "TQBR") then message (" Г‹Г®Г¦Г­Г Гї ГЎГ Г§Г  ",0) end	-- Г¤Г«Гї ГІГҐГЄГіГ№ГҐГ© ГўГҐГ°Г±ГЁГЁ
 		
 			if (y.result == "0") 
-				then message ("Ошибка чтения даты из 3Т",0); 
+				then message ("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї Г¤Г ГІГ» ГЁГ§ 3Г’",0); 
 					d = YearLenght;
 					output_str.days_to_mat_date = 10 * d
 				else d = y.param_value ;
 					output_str.days_to_mat_date = d
 			end
 
-			d =d + 1; 	-- последний день берем в расчет 
+			d =d + 1; 	-- ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ© Г¤ГҐГ­Гј ГЎГҐГ°ГҐГ¬ Гў Г°Г Г±Г·ГҐГІ 
 		
 		
-	--	PrintDbgStr("До экспирации "..d.." дней",5) ;
+	--	PrintDbgStr("Г„Г® ГЅГЄГ±ГЇГЁГ°Г Г¶ГЁГЁ "..d.." Г¤Г­ГҐГ©",5) ;
 		
-	--	PrintDbgStr("htp= "..y.result.."  значение= "..y.param_value,3) ;
+	--	PrintDbgStr("htp= "..y.result.."  Г§Г­Г Г·ГҐГ­ГЁГҐ= "..y.param_value,3) ;
 	
-						-- учтем размер лотов 
+						-- ГіГ·ГІГҐГ¬ Г°Г Г§Г¬ГҐГ° Г«Г®ГІГ®Гў 
 			y = getParamEx(ListCouples[i][3], ListCouples[i][4],"lotsize");	
 			if (y.result == "0") 
-				then message ("Ошибка чтения размера лота из 3Т",0)
+				then message ("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї Г°Г Г§Г¬ГҐГ°Г  Г«Г®ГІГ  ГЁГ§ 3Г’",0)
 				else l = y.param_value
 			end
-			if (l=="0") then message ("Странный лот: 0 ",0); l = 1 end
+			if (l=="0") then message ("Г‘ГІГ°Г Г­Г­Г»Г© Г«Г®ГІ: 0 ",0); l = 1 end
 		
-			--	PrintDbgStr("соотношение лотов "..l,3) ;
-						-- цены последних сделок
+			--	PrintDbgStr("Г±Г®Г®ГІГ­Г®ГёГҐГ­ГЁГҐ Г«Г®ГІГ®Гў "..l,3) ;
+						-- Г¶ГҐГ­Г» ГЇГ®Г±Г«ГҐГ¤Г­ГЁГµ Г±Г¤ГҐГ«Г®ГЄ
 			x = getParamEx(ListCouples[i][1], ListCouples[i][2],"last");	
 			y = getParamEx(ListCouples[i][3], ListCouples[i][4],"last");
 		
@@ -196,9 +196,9 @@ function main ()					-- основной поток
 			y1 = y.param_value;
 			
 			if (x.result == "0" or y.result == "0") 
-				then message ("Ошибка чтения из 3Т last",0)
+				then message ("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї ГЁГ§ 3Г’ last",0)
 				else	
-					if (x1+0.<0.01) then message ("Странный ценник "..ListCouples[i][2].." 'last'"..x1,0); x1=100000 end
+					if (x1+0.<0.01) then message ("Г‘ГІГ°Г Г­Г­Г»Г© Г¶ГҐГ­Г­ГЁГЄ "..ListCouples[i][2].." 'last'"..x1,0); x1=100000 end
 	--	PrintDbgStr("y1= "..y1.." x1= "..x1.." l= "..l.." d= "..d,3) ;					
 				z1 = (y1-x1*l)/l *100 /d * YearLenght;
 	--	PrintDbgStr("z1= "..z1.." x1= "..x1,5) ;			
@@ -208,7 +208,7 @@ function main ()					-- основной поток
 		
 	--	PrintDbgStr("% by bids= "..output_str.perc_by_fact,3) ;
 		
-						-- по bid & offer		
+						-- ГЇГ® bid & offer		
 			x = getParamEx(ListCouples[i][1], ListCouples[i][2],"offer");	
 			y = getParamEx(ListCouples[i][3], ListCouples[i][4],"bid");	
 			x1 = x.param_value;
@@ -218,9 +218,9 @@ function main ()					-- основной поток
 				then 
 					str_err = " "..ListCouples[i][2].." "..ListCouples[i][4].." x.res= "..x.result.." y.res= "..y.result;
 					str_err = str.." x1="..x1.." y1= "..y1;
-					message ("Ошибка чтения из 3Т bids  "..str_err,0)
+					message ("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї ГЁГ§ 3Г’ bids  "..str_err,0)
 				else	
-					if (tonumber(x1)<0.01) then message ("Странный ценник "..ListCouples[i][2].."'offer'"..x1,0); x1=100000 end
+					if (tonumber(x1)<0.01) then message ("Г‘ГІГ°Г Г­Г­Г»Г© Г¶ГҐГ­Г­ГЁГЄ "..ListCouples[i][2].."'offer'"..x1,0); x1=100000 end
 				z1 = (y1-x1*l)/l *100 /d *YearLenght;
 				output_str.perc_by_bid = z1/x1 ;
 				output_str.eff_perc_bb = z1/(x1*1.3) ;		-- +30% 
@@ -229,29 +229,29 @@ function main ()					-- основной поток
 	--	PrintDbgStr("% by bids= "..output_str.perc_by_bid,3) ;		
 		
 			if (num_rows ~= #ListCouples) then InsertRow(t_id, i) end 
-			rec_table (t_id,output_str,i,tal,#tal)					-- заполняем строку
-		end	-- end if(статус сессии) 
-		end	-- цикла 
+			rec_table (t_id,output_str,i,tal,#tal)					-- Г§Г ГЇГ®Г«Г­ГїГҐГ¬ Г±ГІГ°Г®ГЄГі
+		end	-- end if(Г±ГІГ ГІГіГ± Г±ГҐГ±Г±ГЁГЁ) 
+		end	-- Г¶ГЁГЄГ«Г  
 		sleep (t_wait)
 --		t = t + 1;
---		PrintDbgStr("цикл "..t, 1)
+--		PrintDbgStr("Г¶ГЁГЄГ« "..t, 1)
 	end
 end
 
 
 --	PrintDbgStr("test1", t888) 
 	
-function rec_table (lt_id,l_str_res,i,l_tal,n)							-- функция заполнения таблицы
+function rec_table (lt_id,l_str_res,i,l_tal,n)							-- ГґГіГ­ГЄГ¶ГЁГї Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї ГІГ ГЎГ«ГЁГ¶Г»
 	local k,x,s
 		
-	for k=1, n do													-- перебор по колонкам
+	for k=1, n do													-- ГЇГҐГ°ГҐГЎГ®Г° ГЇГ® ГЄГ®Г«Г®Г­ГЄГ Г¬
 		s = l_tal[k].d_form (l_str_res[l_tal[k].data])
 		SetCell(lt_id, i, l_tal[k].c_num,s )          
 	end
 end
 
 
-function OnStop(stop_flag)			-- завершение по команде из терминала
+function OnStop(stop_flag)			-- Г§Г ГўГҐГ°ГёГҐГ­ГЁГҐ ГЇГ® ГЄГ®Г¬Г Г­Г¤ГҐ ГЁГ§ ГІГҐГ°Г¬ГЁГ­Г Г«Г 
 	stopped=true
 --	stop_flag=1
 	message ("Script Spread is finished")
